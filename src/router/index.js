@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Header from '@/components/Header'
-import Main from '@/components/Main'
-import Footer from '@/components/Footer'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Header from '../components/Header.vue';
+import Main from '../components/Main.vue';
+import Footer from '../components/Footer.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -13,8 +13,8 @@ export default new Router({
       components: {
         header: Header,
         main: Main,
-        footer: Footer
-      }
-    }
-  ]
-})
+        footer: Footer,
+      },
+    },
+  ],
+});

@@ -7,54 +7,57 @@
 </template>
 
 <script>
+  /* eslint-env jquery */
   export default {
     name: 'app',
-    data () {
+    data() {
       return {
-        brand: 'Blah Blah Hub'
-      }
+        brand: 'Blah Blah Hub',
+      };
     },
-    mounted: function () {
+    mounted() {
       // Smooth scrolling using jQuery easing
-      $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
-        if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
-          var target = $(this.hash)
-          target = target.length ? target : $('[name=' + this.hash.slice(1) + ']')
+      $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(() => {
+        if (window.location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '')
+          && window.location.hostname === this.hostname) {
+          let target = $(this.hash);
+          target = target.length ? target : $(`[name=${this.hash.slice(1)}]`);
           if (target.length) {
             $('html, body').animate({
-              scrollTop: (target.offset().top - 54)
-            }, 1000, 'easeInOutExpo')
-            return false
+              scrollTop: (target.offset().top - 54),
+            }, 1000, 'easeInOutExpo');
+            return false;
           }
         }
-      })
+        return true;
+      });
 
       // Closes responsive menu when a scroll trigger link is clicked
-      $('.js-scroll-trigger').click(function () {
-        $('.navbar-collapse').collapse('hide')
-      })
+      $('.js-scroll-trigger').click(() => {
+        $('.navbar-collapse').collapse('hide');
+      });
 
       // Activate scrollspy to add active class to navbar items on scroll
       $('body').scrollspy({
         target: '#mainNav',
-        offset: 54
-      })
+        offset: 54,
+      });
 
       // Collapse Navbar
-      var navbarCollapse = function () {
+      const navbarCollapse = () => {
         if ($('#mainNav').offset().top > 100) {
-          $('#mainNav').addClass('navbar-shrink')
+          $('#mainNav').addClass('navbar-shrink');
         } else {
-          $('#mainNav').removeClass('navbar-shrink')
+          $('#mainNav').removeClass('navbar-shrink');
         }
-      }
+      };
 
       // Collapse now if page is not at top
-      navbarCollapse()
+      navbarCollapse();
       // Collapse the navbar when page is scrolled
-      $(window).scroll(navbarCollapse)
-    }
-  }
+      $(window).scroll(navbarCollapse);
+    },
+  };
 </script>
 
 <style>
