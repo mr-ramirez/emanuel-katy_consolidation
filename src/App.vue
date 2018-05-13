@@ -1,61 +1,27 @@
 <template>
   <div id="app">
-    <router-view name="header"></router-view>
-    <router-view name="main"></router-view>
-    <router-view name="footer"></router-view>
+    <Header></Header>
+    <NewMembersList></NewMembersList>
   </div>
 </template>
 
 <script>
   /* eslint-env jquery */
+  import Footer from './components/Footer.vue';
+  import Header from './components/Header.vue';
+  import NewMembersList from './components/NewMembersList.vue';
+
   export default {
     name: 'app',
+    components: {
+      Footer,
+      Header,
+      NewMembersList,
+    },
     data() {
       return {
         brand: 'Blah Blah Hub',
       };
-    },
-    mounted() {
-      // Smooth scrolling using jQuery easing
-      $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(() => {
-        if (window.location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '')
-          && window.location.hostname === this.hostname) {
-          let target = $(this.hash);
-          target = target.length ? target : $(`[name=${this.hash.slice(1)}]`);
-          if (target.length) {
-            $('html, body').animate({
-              scrollTop: (target.offset().top - 54),
-            }, 1000, 'easeInOutExpo');
-            return false;
-          }
-        }
-        return true;
-      });
-
-      // Closes responsive menu when a scroll trigger link is clicked
-      $('.js-scroll-trigger').click(() => {
-        $('.navbar-collapse').collapse('hide');
-      });
-
-      // Activate scrollspy to add active class to navbar items on scroll
-      $('body').scrollspy({
-        target: '#mainNav',
-        offset: 54,
-      });
-
-      // Collapse Navbar
-      const navbarCollapse = () => {
-        if ($('#mainNav').offset().top > 100) {
-          $('#mainNav').addClass('navbar-shrink');
-        } else {
-          $('#mainNav').removeClass('navbar-shrink');
-        }
-      };
-
-      // Collapse now if page is not at top
-      navbarCollapse();
-      // Collapse the navbar when page is scrolled
-      $(window).scroll(navbarCollapse);
     },
   };
 </script>

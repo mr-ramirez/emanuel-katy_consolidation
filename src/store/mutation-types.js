@@ -1,0 +1,2 @@
+export const GET_NEW_MEMBERS = 'GET_NEW_MEMBERS';
+export const SET_NEW_MEMBERS = 'SET_NEW_MEMBERS';
