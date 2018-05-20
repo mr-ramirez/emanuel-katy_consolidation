@@ -1,22 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Header from '../components/Header.vue';
-import Main from '../components/Main.vue';
-import NewMembersList from '../components/NewMembersList.vue';
-import Footer from '../components/Footer.vue';
+
+import GeneralMap from '../components/GeneralMap.vue';
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
+      component: GeneralMap,
+      name: 'GeneralMap',
       path: '/',
-      components: {
-        header: Header,
-        main: Main,
-        newMembersList: NewMembersList,
-        footer: Footer,
-      },
     },
   ],
+  scrollBehavior: () => ({ x: 0, y: 0 }),
 });
