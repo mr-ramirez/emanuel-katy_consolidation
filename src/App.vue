@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <Header></Header>
-    <NewMembersList></NewMembersList>
+    <router-view></router-view>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -9,14 +10,12 @@
   /* eslint-env jquery */
   import Footer from './components/Footer.vue';
   import Header from './components/Header.vue';
-  import NewMembersList from './components/NewMembersList.vue';
 
   export default {
     name: 'app',
     components: {
       Footer,
       Header,
-      NewMembersList,
     },
     data() {
       return {
@@ -99,7 +98,7 @@
 
   .btn {
     font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 700;
+    font-weight: 400;
   }
 
   .btn-primary {

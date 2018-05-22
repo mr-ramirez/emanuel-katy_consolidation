@@ -28,12 +28,21 @@
         msg: 'Welcome to Your Vue.js App',
       };
     },
+    methods: {
+    },
   };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .bg-blue {
-    background-color: '#086A87' !important;
+    background: rgba(6,124,148,1);
+    background: -moz-radial-gradient(center, ellipse cover, rgba(6,124,148,1) 0%, rgba(22,98,117,1) 41%, rgba(9,50,61,1) 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(6,124,148,1)), color-stop(41%, rgba(22,98,117,1)), color-stop(100%, rgba(9,50,61,1)));
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(6,124,148,1) 0%, rgba(22,98,117,1) 41%, rgba(9,50,61,1) 100%);
+    background: -o-radial-gradient(center, ellipse cover, rgba(6,124,148,1) 0%, rgba(22,98,117,1) 41%, rgba(9,50,61,1) 100%);
+    background: -ms-radial-gradient(center, ellipse cover, rgba(6,124,148,1) 0%, rgba(22,98,117,1) 41%, rgba(9,50,61,1) 100%);
+    background: radial-gradient(ellipse at center, rgba(6,124,148,1) 0%, rgba(22,98,117,1) 41%, rgba(9,50,61,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#067c94', endColorstr='#09323d', GradientType=1 );
   }
 </style>
