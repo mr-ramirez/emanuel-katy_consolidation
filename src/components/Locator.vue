@@ -1,51 +1,41 @@
 <template>
-  <div class="modal fade" id="myModal" tabindex="-1"
-    role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal fade" id="memberInformation" tabindex="-1"
+    role="dialog" aria-labelledby="memberInformationLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Localización</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Información del Miembro de la Iglesia</h5>
           <button type="button"
             class="close"
             data-dismiss="modal"
-            aria-label="Close"
-            v-on:click="resetState()">
+            aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <GmapMap
-            :center="{lat:29.761993, lng:-95.366302}"
-            :zoom="9"
-            style="width: 465px; height: 300px"
-            v-if="memberToLocate !== null && memberCoordinates !== null"
-          >
-            <GmapMarker
-              :position="memberCoordinates"
-              :clickable="true"
-              :draggable="false"
-              :shape="shape"
-              v-if="memberToLocate !== null && memberCoordinates !== null"
-              :icon="newMemberIconPath"
-            />
+          <div class="row">
+            <div class="col-12">
+              <h4>{{ person.firstName + ' ' + person.lastName }}</h4>
+            </div>
+          </div>
 
-            <GmapMarker
-              v-if="areCellsCoordinatesSet()"
-              v-for="(cell, index) in cellsAddresses"
-              :key="index"
-              :position="cell.position"
-              :clickable="true"
-              :draggable="false"
-              :label="`${cell.firstName} ${cell.lastName}`"
-            />
-          </GmapMap>
+          <div class="row">
+            <div class="col-12">
+              <p><strong>Número de Contacto: </strong>{{ person.phoneNumber }}</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <p><strong>Correo Electrónico: </strong>{{ person.email }}</p>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button"
             class="btn btn-secondary"
-            data-dismiss="modal"
-            v-on:click="resetState()">Cerrar</button>
+            data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -53,19 +43,15 @@
 </template>
 
 <script>
-  import { find } from 'lodash';
   import { mapMutations, mapState } from 'vuex';
 
-  import NewMemberIcon from '../assets/logo.png';
-  import { RESET_STATE } from '../store/mutation-types';
+  import { HIDE_DETAILS } from '../store/mutation-types';
 
   export default {
     name: 'locator',
     computed: {
       ...mapState('members', [
-        'cellsAddresses',
-        'memberCoordinates',
-        'memberToLocate',
+        'person',
       ]),
     },
     data() {
@@ -74,23 +60,12 @@
           lat: 10,
           lng: 10,
         },
-        newMemberIconPath: NewMemberIcon,
-        shape: {
-          type: 'info',
-        },
       };
     },
     methods: {
       ...mapMutations('members', {
-        resetState: RESET_STATE,
+        hideDetails: HIDE_DETAILS,
       }),
-      areCellsCoordinatesSet() {
-        const cellWithNoCoordinate = find(
-          this.cellsAddresses,
-          cell => (cell.position !== undefined),
-        );
-        return cellWithNoCoordinate !== undefined;
-      },
     },
     props: {
       member: Object,

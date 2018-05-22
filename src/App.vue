@@ -98,7 +98,7 @@
 
   .btn {
     font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 700;
+    font-weight: 400;
   }
 
   .btn-primary {

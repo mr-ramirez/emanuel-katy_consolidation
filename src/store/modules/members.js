@@ -4,6 +4,7 @@ import HttpService from '../../api/HttpService';
 import {
   GET_CELLS_ADDRESSES,
   GET_NEW_ATTENDERS,
+  HIDE_DETAILS,
   LOCATE_MEMBER,
   RESET_STATE,
   SET_ATTENDER_COORDINATES,
@@ -11,6 +12,8 @@ import {
   SET_CELL_COORDINATE,
   SET_GOOGLE_MAPS_CLIENT,
   SET_NEW_ATTENDERS,
+  SHOW_DETAILS,
+  SHOW_MAP_OPTIONS,
 } from '../mutation-types';
 
 export default {
@@ -18,9 +21,21 @@ export default {
   state: {
     cellsAddresses: [],
     googleMapsClient: null,
+    loading: false,
     newAttenders: [],
+    person: null,
+    shouldMapOptionsBeDisplayed: false,
   },
   mutations: {
+    [GET_CELLS_ADDRESSES](state) {
+      state.loading = false;
+    },
+    [GET_NEW_ATTENDERS](state) {
+      state.loading = true;
+    },
+    [HIDE_DETAILS](state) {
+      state.person = null;
+    },
     [LOCATE_MEMBER](state, member) {
       state.memberToLocate = member;
     },
@@ -39,38 +54,48 @@ export default {
         key: 'AIzaSyAuANDgIy2xXINbsPiRLT8scXYfigQkV90',
       });
     },
-    [SET_ATTENDER_COORDINATES](state, { index, coordinates }) {
-      state.newAttenders[index].position = coordinates;
+    [SET_ATTENDER_COORDINATES](state, { index, coordinate }) {
+      state.newAttenders[index].position = coordinate;
     },
     [SET_NEW_ATTENDERS](state, newAttenders) {
       state.newAttenders = newAttenders;
     },
+    [SHOW_DETAILS](state, person) {
+      state.person = person;
+    },
+    [SHOW_MAP_OPTIONS](state) {
+      state.shouldMapOptionsBeDisplayed = true;
+    },
   },
   actions: {
-    getCellsAddresses({ commit, state }) {
+    async getCellsAddresses({ commit, state }) {
       commit(GET_CELLS_ADDRESSES);
 
-      return HttpService.get('cells')
+      return HttpService.get('cell-leaders')
         .then(async (firstResponse) => {
           state.cellsAddresses = firstResponse.cells;
 
           /* eslint-disable */
           for (const index in firstResponse.cells) {
-            state.googleMapsClient.geocode({
-              address: firstResponse.cells[index].address,
-            }, (error, response) => {
-              commit(SET_CELL_COORDINATE, {
-                index,
-                coordinate: response.json.results[0].geometry.location,
-              });
-            });
+            if (firstResponse.cells[index].address
+              && firstResponse.cells[index].address !== '') {
+                state.googleMapsClient.geocode({
+                  address: firstResponse.cells[index].address,
+                }, (error, response) => {
+                  commit(SET_CELL_COORDINATE, {
+                    index,
+                    coordinate: response.json.results[0].geometry.location,
+                  });
+                });
+            }
           }
           /* eslint-enable */
 
+          commit(GET_CELLS_ADDRESSES);
           return Promise.resolve(true);
         });
     },
-    getNewAttenders({ commit }) {
+    async getNewAttenders({ commit, state }) {
       commit(SET_GOOGLE_MAPS_CLIENT);
       commit(GET_NEW_ATTENDERS);
 
