@@ -2,40 +2,35 @@
   <div class="modal fade" id="memberInformation" tabindex="-1"
     role="dialog" aria-labelledby="memberInformationLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Información del Miembro de la Iglesia</h5>
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title text-light" id="exampleModalLabel">Información del Miembro de la Iglesia</h5>
           <button type="button"
             class="close"
             data-dismiss="modal"
             aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span class="text-white" aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-12">
-              <h4>{{ person.firstName + ' ' + person.lastName }}</h4>
+              <h4 class="text-center">{{ getName() }}</h4>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12">
-              <p><strong>Número de Contacto: </strong>{{ person.phoneNumber }}</p>
+              <p class="text-center font-italic">{{ getPhoneNumber() }}</p>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12">
-              <p><strong>Correo Electrónico: </strong>{{ person.email }}</p>
+              <p class="text-center font-italic">{{ getEmail() }}</p>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -66,9 +61,24 @@
       ...mapMutations('members', {
         hideDetails: HIDE_DETAILS,
       }),
-    },
-    props: {
-      member: Object,
+      getEmail() {
+        if (this.person !== null) {
+          return this.person.email;
+        }
+        return '';
+      },
+      getName() {
+        if (this.person !== null) {
+          return `${this.person.firstName} ${this.person.lastName}`;
+        }
+        return '';
+      },
+      getPhoneNumber() {
+        if (this.person !== null) {
+          return this.person.phoneNumber;
+        }
+        return '';
+      },
     },
   };
 </script>

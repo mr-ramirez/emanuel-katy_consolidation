@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <!-- <Locator /> -->
+      <Locator />
       <div class="col-12" v-if="loading">
         <Spinner />
       </div>
@@ -28,7 +28,7 @@
             :position="getCellPosition(indexCell)"
             :clickable="true"
             :draggable="false"
-            @click="center=cell.position"
+            @click="displayDetails(cell)"
             :icon="markerYellowIconPath"
           />
         </GmapMap>
@@ -250,7 +250,6 @@
         }
       },
       displayDetails(person) {
-        this.center = person.position;
         this.showDetails(person);
         $('#memberInformation').modal('show');
       },
