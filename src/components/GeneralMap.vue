@@ -50,13 +50,21 @@
               </h5>
             </div>
 
-            <div id="nuevosMiembrosLista" class="collapse show" aria-labelledby="nuevosMiembrosHeader" data-parent="#accordion">
+            <div id="nuevosMiembrosLista"
+              class="collapse show"
+              aria-labelledby="nuevosMiembrosHeader"
+              data-parent="#accordion">
               <div class="card-body p-0">
                 <div class="list-group list-group-flush">
-                  <a href="#"
-                    class="list-group-item list-group-item-action"
+                  <a :class="{
+                      'list-group-item': true,
+                      'list-group-item-action': true,
+                      'text-danger': isPositionUndefined(attender),
+                      'disabled': isPositionUndefined(attender),
+                    }"
                     v-for="(attender, indexAttender) in newAttenders"
-                    :key="indexAttender + 'AI'">
+                    :key="indexAttender + 'AI'"
+                    v-on:click="centerMember(attender)">
                     {{ `${attender.firstName} ${attender.lastName}` }}
                   </a>
                 </div>
@@ -78,10 +86,15 @@
             <div id="lideresCelulaLista" class="collapse" aria-labelledby="lideresCelulaHeader" data-parent="#accordion">
               <div class="card-body p-0">
                 <div class="list-group list-group-flush">
-                  <a href="#"
-                    class="list-group-item list-group-item-action"
+                  <a :class="{
+                      'list-group-item': true,
+                      'list-group-item-action': true,
+                      'text-danger': isPositionUndefined(cell),
+                      'disabled': isPositionUndefined(cell),
+                    }"
                     v-for="(cell, indexCell) in cellsAddresses"
-                    :key="indexCell + 'CI'">
+                    :key="indexCell + 'CI'"
+                    v-on:click="centerMember(cell)">
                     {{ `${cell.firstName} ${cell.lastName}` }}
                   </a>
                 </div>
@@ -219,7 +232,7 @@
         loading: false,
         markerBlueIconPath: MarkerBlue,
         markerYellowIconPath: MarkerYellow,
-        zoom: 12,
+        zoom: 13,
       };
     },
     methods: {
@@ -231,6 +244,11 @@
         showDetails: SHOW_DETAILS,
         showMapOptions: SHOW_MAP_OPTIONS,
       }),
+      centerMember(member) {
+        if (member.position) {
+          this.center = member.position;
+        }
+      },
       displayDetails(person) {
         this.center = person.position;
         this.showDetails(person);
@@ -255,6 +273,12 @@
               100,
             );
           });
+      },
+      isPositionUndefined(member) {
+        if (member === undefined || member.position === undefined) {
+          return true;
+        }
+        return false;
       },
     },
   };
