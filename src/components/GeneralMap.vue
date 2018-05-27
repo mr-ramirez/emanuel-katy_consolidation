@@ -16,7 +16,7 @@
             :position="churchLocation"
             :clickable="true"
             :draggable="false"
-            @click="center=churchLocation"
+            @click="resetSelectedMember()"
             :icon="chapelIconPath"
           />
           <GmapMarker
@@ -341,6 +341,10 @@
           return true;
         }
         return false;
+      },
+      resetSelectedMember() {
+        this.center = Config.churchLocation;
+        this.memberSelected = null;
       },
       showCells() {
         this.shouldCellBeHidden = false;
