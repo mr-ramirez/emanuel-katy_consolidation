@@ -4,5 +4,5 @@ export const api = {
 
 export default {
   api,
-  googleApiKey: process.env.GOOGLE_API_KEY,
+  googleApiKey: 'AIzaSyAuANDgIy2xXINbsPiRLT8scXYfigQkV90',
 };
