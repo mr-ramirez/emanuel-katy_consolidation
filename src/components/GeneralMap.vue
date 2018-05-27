@@ -5,10 +5,10 @@
       <div class="col-12" v-if="loading">
         <Spinner />
       </div>
-      <div class="col-12" v-if="!loading">
+      <div class="col-sm-8 pr-0" v-if="!loading">
         <GmapMap
           :center="center"
-          :zoom="12"
+          :zoom="zoom"
           style="width: 100%; height: 500px"
           ref="mapRef"
         >
@@ -20,6 +20,7 @@
             :draggable="false"
             @click="displayDetails(attender)"
             :icon="markerBlueIconPath"
+            :title="`${attender.firstName} ${attender.lastName}`"
           />
           <GmapMarker
             v-for="(cell, indexCell) in cellsAddresses"
@@ -31,6 +32,81 @@
             :icon="markerYellowIconPath"
           />
         </GmapMap>
+      </div>
+
+      <div class="col-sm-4 pl-0" v-if="!loading">
+        <div class="accordion" id="accordion">
+          <div class="card rounded-0 border border-dark">
+            <div class="card-header rounded-0 bg-secondary" id="nuevosMiembrosHeader">
+              <h5 class="mb-0">
+                <button class="btn btn-link text-light"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#nuevosMiembrosLista"
+                  aria-expanded="true"
+                  aria-controls="nuevosMiembrosLista">
+                  Nuevos Miembros
+                </button>
+              </h5>
+            </div>
+
+            <div id="nuevosMiembrosLista" class="collapse show" aria-labelledby="nuevosMiembrosHeader" data-parent="#accordion">
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                  <a href="#"
+                    class="list-group-item list-group-item-action"
+                    v-for="(attender, indexAttender) in newAttenders"
+                    :key="indexAttender + 'AI'">
+                    {{ `${attender.firstName} ${attender.lastName}` }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card rounded-0 border border-dark">
+            <div class="card-header rounded-0 bg-header-collapsible" id="lideresCelulaHeader">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed text-light"
+                  type="button" data-toggle="collapse"
+                  data-target="#lideresCelulaLista"
+                  aria-expanded="false"
+                  aria-controls="lideresCelulaLista">
+                  Líderes de Célula
+                </button>
+              </h5>
+            </div>
+            <div id="lideresCelulaLista" class="collapse" aria-labelledby="lideresCelulaHeader" data-parent="#accordion">
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                  <a href="#"
+                    class="list-group-item list-group-item-action"
+                    v-for="(cell, indexCell) in cellsAddresses"
+                    :key="indexCell + 'CI'">
+                    {{ `${cell.firstName} ${cell.lastName}` }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card rounded-0 border border-dark">
+            <div class="card-header rounded-0 bg-info" id="miembrosConstantesHeader">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed text-light"
+                  type="button" data-toggle="collapse"
+                  data-target="#miembrosConstantesLista"
+                  aria-expanded="false"
+                  aria-controls="miembrosConstantesLista">
+                  Miembros Constantes
+                </button>
+              </h5>
+            </div>
+            <div id="miembrosConstantesLista" class="collapse" aria-labelledby="miembrosConstantesHeader" data-parent="#accordion">
+              <div class="card-body">
+                <p>Lista vacía</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -143,6 +219,7 @@
         loading: false,
         markerBlueIconPath: MarkerBlue,
         markerYellowIconPath: MarkerYellow,
+        zoom: 12,
       };
     },
     methods: {
@@ -183,6 +260,8 @@
   };
 </script>
 
-<style>
-
+<style scoped>
+ .bg-header-collapsible {
+   background-color: rgba(22,98,117,1);
+ }
 </style>
