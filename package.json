@@ -11,7 +11,8 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@google/maps": "^0.4.6",
@@ -26,9 +27,7 @@
     "vue-google-maps": "^0.1.21",
     "vue-router": "^3.0.1",
     "vue2-google-maps": "^0.9.7",
-    "vuex": "^3.0.1"
-  },
-  "devDependencies": {
+    "vuex": "^3.0.1",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
@@ -97,6 +96,8 @@
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.18.2",
     "webpack-merge": "^4.1.0"
+  },
+  "devDependencies": {
   },
   "engines": {
     "node": ">= 4.0.0",
