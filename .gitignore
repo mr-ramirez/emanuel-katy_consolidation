@@ -8,6 +8,7 @@ test/e2e/reports
 selenium-debug.log
 bk-*.log
 *.env
+dist/
 
 # Editor directories and files
 .idea
