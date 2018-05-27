@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import app from './modules/app';
+import main from './modules/main';
 import members from './modules/members';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    app,
+    main,
     members,
   },
 });

@@ -13,23 +13,31 @@
           ref="mapRef"
         >
           <GmapMarker
+            :position="churchLocation"
+            :clickable="true"
+            :draggable="false"
+            @click="center=churchLocation"
+            :icon="chapelIconPath"
+          />
+          <GmapMarker
+            v-if="!shouldNewAttenderBeHidden"
             v-for="(attender, indexAttender) in newAttenders"
             :key="indexAttender + 'A'"
             :position="getNewAttenderPosition(indexAttender)"
             :clickable="true"
             :draggable="false"
             @click="displayDetails(attender)"
-            :icon="markerBlueIconPath"
-            :title="`${attender.firstName} ${attender.lastName}`"
+            :icon="getNewAttenderIcon(indexAttender)"
           />
           <GmapMarker
+            v-if="!shouldCellBeHidden"
             v-for="(cell, indexCell) in cellsAddresses"
             :key="indexCell + 'C'"
             :position="getCellPosition(indexCell)"
             :clickable="true"
             :draggable="false"
             @click="displayDetails(cell)"
-            :icon="markerYellowIconPath"
+            :icon="getCellIcon(indexCell)"
           />
         </GmapMap>
       </div>
@@ -150,11 +158,22 @@
                   </div>
                   <div class="col-4">
                     <div class="row justify-content-center">
-                      <img :src="markerBlueIconPath"/>
+                      <img :src="newAttenderIconPath"/>
                     </div>
                     <div class="row justify-content-center">
                       <button type="button"
                         class="btn btn-light p-1">Cambiar Color</button>
+                    </div>
+                    <div class="row justify-content-center">
+                      <button type="button"
+                        class="btn btn-light p-1"
+                        v-on:click="hideNewAttenders()"
+                        v-if="!shouldNewAttenderBeHidden">Esconder</button>
+
+                      <button type="button"
+                        class="btn btn-success p-1"
+                        v-on:click="showNewAttenders()"
+                        v-if="shouldNewAttenderBeHidden">Mostrar</button>
                     </div>
                   </div>
                 </div>
@@ -177,10 +196,21 @@
                   </div>
                   <div class="col-4">
                     <div class="row justify-content-center">
-                      <img :src="markerYellowIconPath"/>
+                      <img :src="cellIconPath"/>
                     </div>
                     <div class="row justify-content-center">
                       <button type="button" class="btn btn-light p-1">Cambiar Color</button>
+                    </div>
+                    <div class="row justify-content-center">
+                      <button type="button"
+                        class="btn btn-light p-1"
+                        v-on:click="hideCells()"
+                        v-if="!shouldCellBeHidden">Esconder</button>
+
+                      <button type="button"
+                        class="btn btn-success p-1"
+                        v-on:click="showCells()"
+                        v-if="shouldCellBeHidden">Mostrar</button>
                     </div>
                   </div>
                 </div>
@@ -202,11 +232,13 @@
     SHOW_MAP_OPTIONS,
   } from '../store/mutation-types';
 
+  import Config from '../config/config';
+
   import Locator from './Locator.vue';
   import Spinner from './Spinner.vue';
 
-  import MarkerBlue from '../assets/img/icons/marker-blue.png';
-  import MarkerYellow from '../assets/img/icons/marker-yellow.png';
+  import Chapel from '../assets/img/icons/chapel.png';
+  import MarkerSelected from '../assets/img/icons/marker-selected.png';
 
   export default {
     name: 'GeneralMap',
@@ -218,20 +250,22 @@
       Spinner,
     },
     computed: {
-      ...mapState('app', [
-        'churchLocation',
-      ]),
       ...mapState('members', [
         'cellsAddresses',
+        'cellIconPath',
+        'newAttenderIconPath',
         'newAttenders',
       ]),
     },
     data() {
       return {
         center: { lat: 29.7878773, lng: -95.69286590000002 },
+        chapelIconPath: Chapel,
+        churchLocation: Config.churchLocation,
         loading: false,
-        markerBlueIconPath: MarkerBlue,
-        markerYellowIconPath: MarkerYellow,
+        memberSelected: null,
+        shouldCellBeHidden: false,
+        shouldNewAttenderBeHidden: false,
         zoom: 13,
       };
     },
@@ -247,17 +281,46 @@
       centerMember(member) {
         if (member.position) {
           this.center = member.position;
+          this.memberSelected = member;
         }
       },
       displayDetails(person) {
         this.showDetails(person);
         $('#memberInformation').modal('show');
       },
+      getCellIcon(index) {
+        if (!this.cellsAddresses[index] || !this.cellsAddresses[index].position) {
+          return this.cellIconPath;
+        }
+
+        if (this.memberSelected !== null
+          && this.memberSelected.address === this.cellsAddresses[index].address) {
+          return MarkerSelected;
+        }
+        return this.cellIconPath;
+      },
       getCellPosition(index) {
         return this.cellsAddresses[index].position;
       },
+      getNewAttenderIcon(index) {
+        if (!this.newAttenders[index] || !this.newAttenders[index].position) {
+          return this.newAttenderIconPath;
+        }
+
+        if (this.memberSelected !== null
+          && this.memberSelected.address === this.newAttenders[index].address) {
+          return MarkerSelected;
+        }
+        return this.newAttenderIconPath;
+      },
       getNewAttenderPosition(index) {
         return this.newAttenders[index].position;
+      },
+      hideCells() {
+        this.shouldCellBeHidden = true;
+      },
+      hideNewAttenders() {
+        this.shouldNewAttenderBeHidden = true;
       },
       initialize() {
         this.loading = true;
@@ -266,7 +329,7 @@
           .then(() => {
             setTimeout(
               () => {
-                this.center = { lat: 29.825704, lng: -95.72114999999997 };
+                this.center = Config.churchLocation;
                 this.loading = false;
               },
               100,
@@ -278,6 +341,12 @@
           return true;
         }
         return false;
+      },
+      showCells() {
+        this.shouldCellBeHidden = false;
+      },
+      showNewAttenders() {
+        this.shouldNewAttenderBeHidden = false;
       },
     },
   };

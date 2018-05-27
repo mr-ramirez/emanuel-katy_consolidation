@@ -1,5 +1,7 @@
 import * as GoogleMapsClient from '@google/maps';
 import HttpService from '../../api/HttpService';
+import MarkerBlue from '../../assets/img/icons/marker-blue.png';
+import MarkerOrange from '../../assets/img/icons/marker-orange.png';
 
 import {
   GET_CELLS_ADDRESSES,
@@ -25,6 +27,8 @@ export default {
     newAttenders: [],
     person: null,
     shouldMapOptionsBeDisplayed: false,
+    cellIconPath: MarkerOrange,
+    newAttenderIconPath: MarkerBlue,
   },
   mutations: {
     [GET_CELLS_ADDRESSES](state) {

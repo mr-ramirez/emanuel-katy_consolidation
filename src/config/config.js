@@ -4,5 +4,6 @@ export const api = {
 
 export default {
   api,
+  churchLocation: { lat: 29.825704, lng: -95.72114999999997 },
   googleApiKey: 'AIzaSyAuANDgIy2xXINbsPiRLT8scXYfigQkV90',
 };
