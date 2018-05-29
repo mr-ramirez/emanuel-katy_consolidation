@@ -250,10 +250,12 @@
       Spinner,
     },
     computed: {
-      ...mapState('members', [
-        'cellsAddresses',
+      ...mapState('app', [
         'cellIconPath',
         'newAttenderIconPath',
+      ]),
+      ...mapState('members', [
+        'cellsAddresses',
         'newAttenders',
       ]),
     },
