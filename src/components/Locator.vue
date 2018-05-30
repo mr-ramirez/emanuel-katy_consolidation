@@ -4,8 +4,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-dark">
-          <h5 class="modal-title text-light" id="exampleModalLabel">Información del Miembro de la Iglesia</h5>
+        <div class="modal-header bg-success">
+          <p class="modal-title text-light" id="exampleModalLabel">Información del Miembro de la Iglesia</p>
           <button type="button"
             class="close"
             data-dismiss="modal"
@@ -22,13 +22,18 @@
 
           <div class="row">
             <div class="col-12">
-              <p class="text-center font-italic">{{ getPhoneNumber() }}</p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <p class="text-center font-italic">{{ getEmail() }}</p>
+              <table class="table table-striped m-0">
+                <tbody>
+                  <tr>
+                    <td>Phone Number</td>
+                    <td>{{ getPhoneNumber() }}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td>{{ getEmail() }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

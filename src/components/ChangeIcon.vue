@@ -4,8 +4,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-dark">
-          <h5 class="modal-title text-light" id="exampleModalLabel">Seleccione un ícono</h5>
+        <div class="modal-header bg-success">
+          <p class="modal-title text-light" id="exampleModalLabel">Seleccione un ícono</p>
           <button type="button"
             class="close"
             data-dismiss="modal"
