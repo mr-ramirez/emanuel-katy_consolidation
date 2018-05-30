@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="row">
+      <ChangeIcon :typeOfMember="typeOfMember" />
       <Locator />
       <div class="col-12" v-if="loading">
         <Spinner />
@@ -72,7 +73,7 @@
                     }"
                     v-for="(attender, indexAttender) in newAttenders"
                     :key="indexAttender + 'AI'"
-                    v-on:click="centerMember(attender)">
+                    v-on:click="centerNewMember(attender)">
                     {{ `${attender.firstName} ${attender.lastName}` }}
                   </a>
                 </div>
@@ -102,7 +103,7 @@
                     }"
                     v-for="(cell, indexCell) in cellsAddresses"
                     :key="indexCell + 'CI'"
-                    v-on:click="centerMember(cell)">
+                    v-on:click="centerCell(cell)">
                     {{ `${cell.firstName} ${cell.lastName}` }}
                   </a>
                 </div>
@@ -162,7 +163,8 @@
                     </div>
                     <div class="row justify-content-center">
                       <button type="button"
-                        class="btn btn-light p-1">Cambiar Color</button>
+                        class="btn btn-light p-1"
+                        v-on:click="displayIconSelectorModal('New Attender')">Cambiar Icono</button>
                     </div>
                     <div class="row justify-content-center">
                       <button type="button"
@@ -199,7 +201,9 @@
                       <img :src="cellIconPath"/>
                     </div>
                     <div class="row justify-content-center">
-                      <button type="button" class="btn btn-light p-1">Cambiar Color</button>
+                      <button type="button"
+                        class="btn btn-light p-1"
+                        v-on:click="displayIconSelectorModal('Leader')">Cambiar Icono</button>
                     </div>
                     <div class="row justify-content-center">
                       <button type="button"
@@ -228,12 +232,14 @@
 <script>
   import { mapActions, mapMutations, mapState } from 'vuex';
   import {
+    LOAD_ICONS_TO_SELECT,
     SHOW_DETAILS,
     SHOW_MAP_OPTIONS,
   } from '../store/mutation-types';
 
   import Config from '../config/config';
 
+  import ChangeIcon from './ChangeIcon.vue';
   import Locator from './Locator.vue';
   import Spinner from './Spinner.vue';
 
@@ -243,17 +249,21 @@
   export default {
     name: 'GeneralMap',
     beforeMount() {
+      this.loadIcons();
       this.initialize();
     },
     components: {
+      ChangeIcon,
       Locator,
       Spinner,
     },
     computed: {
-      ...mapState('members', [
-        'cellsAddresses',
+      ...mapState('app', [
         'cellIconPath',
         'newAttenderIconPath',
+      ]),
+      ...mapState('members', [
+        'cellsAddresses',
         'newAttenders',
       ]),
     },
@@ -262,6 +272,7 @@
         center: { lat: 29.7878773, lng: -95.69286590000002 },
         chapelIconPath: Chapel,
         churchLocation: Config.churchLocation,
+        typeOfMember: null,
         loading: false,
         memberSelected: null,
         shouldCellBeHidden: false,
@@ -270,16 +281,28 @@
       };
     },
     methods: {
+      ...mapActions('app', [
+        'loadIcons',
+      ]),
       ...mapActions('members', [
         'getCellsAddresses',
         'getNewAttenders',
       ]),
+      ...mapMutations('app', {
+        loadIconsToSelect: LOAD_ICONS_TO_SELECT,
+      }),
       ...mapMutations('members', {
         showDetails: SHOW_DETAILS,
         showMapOptions: SHOW_MAP_OPTIONS,
       }),
-      centerMember(member) {
-        if (member.position) {
+      centerCell(member) {
+        if (member.position && !this.shouldCellBeHidden) {
+          this.center = member.position;
+          this.memberSelected = member;
+        }
+      },
+      centerNewMember(member) {
+        if (member.position && !this.shouldNewAttenderBeHidden) {
           this.center = member.position;
           this.memberSelected = member;
         }
@@ -287,6 +310,11 @@
       displayDetails(person) {
         this.showDetails(person);
         $('#memberInformation').modal('show');
+      },
+      displayIconSelectorModal(typeOfMember) {
+        this.typeOfMember = typeOfMember;
+        this.loadIconsToSelect();
+        $('#changeIcon').modal('show');
       },
       getCellIcon(index) {
         if (!this.cellsAddresses[index] || !this.cellsAddresses[index].position) {
@@ -318,9 +346,11 @@
       },
       hideCells() {
         this.shouldCellBeHidden = true;
+        this.center = Config.churchLocation;
       },
       hideNewAttenders() {
         this.shouldNewAttenderBeHidden = true;
+        this.center = Config.churchLocation;
       },
       initialize() {
         this.loading = true;
