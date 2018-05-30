@@ -25,11 +25,11 @@
               <table class="table table-striped m-0">
                 <tbody>
                   <tr>
-                    <td>Phone Number</td>
+                    <td>Número de Teléfono</td>
                     <td>{{ getPhoneNumber() }}</td>
                   </tr>
                   <tr>
-                    <td>Email</td>
+                    <td>Correo Electrónico</td>
                     <td>{{ getEmail() }}</td>
                   </tr>
                 </tbody>
